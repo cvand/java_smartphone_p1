@@ -15,12 +15,12 @@ public class OptionSet implements Serializable {
 	// elements in the array that are not null)
 	private int currentSize = 0;
 
-	OptionSet(String n, int size) {
+	protected OptionSet(String n, int size) {
 		opt = new Option[size];
 		name = n;
 	}
 
-	public Option getOptionByName(String name) {
+	protected Option getOptionByName(String name) {
 		// look in the opt for an object with name = name
 		for (int i = 0; i < currentSize; i++) {
 			Option option = this.opt[i];
@@ -43,11 +43,11 @@ public class OptionSet implements Serializable {
 		return index;
 	}
 
-	public Option[] getOptions() {
+	protected Option[] getOptions() {
 		return opt;
 	}
 
-	public void setOptions(Option[] opt) {
+	protected void setOptions(Option[] opt) {
 		this.opt = opt;
 		// calculate the actual size of the array
 		for (int i = 0; i < opt.length; i++) {
@@ -58,7 +58,7 @@ public class OptionSet implements Serializable {
 		}
 	}
 
-	public void updateOption(Option opt, String newName, float newPrice) {
+	protected void updateOption(Option opt, String newName, float newPrice) {
 		// find the index of the option in the set and update the values
 		int index = getOptionIndex(opt);
 		if (index > -1) {
@@ -67,18 +67,18 @@ public class OptionSet implements Serializable {
 		}
 	}
 
-	public void updateOption(String oldName, String newName, float newPrice) {
+	protected void updateOption(String oldName, String newName, float newPrice) {
 		// find the option in the set and update the values
 		Option opt = getOptionByName(oldName);
 		updateOption(opt, newName, newPrice);
 	}
 	
 
-	public void addOption(String name, float price) throws Exception {
+	protected void addOption(String name, float price) throws Exception {
 		addOption(new Option(name, price));
 	}
 
-	public void addOption(Option opt) throws Exception {
+	protected void addOption(Option opt) throws Exception {
 		// if the array has room for more objects
 		if (currentSize < this.opt.length) {
 			// add the object after the last non-null object
@@ -89,7 +89,7 @@ public class OptionSet implements Serializable {
 		}
 	}
 
-	public void removeOption(Option opt) {
+	protected void removeOption(Option opt) {
 		int index = getOptionIndex(opt);
 
 		// if Option opt was found in the array, remove it and move all the
@@ -109,18 +109,18 @@ public class OptionSet implements Serializable {
 
 	}
 
-	public void removeOptionByName(String name) {
+	protected void removeOptionByName(String name) {
 		Option o = getOptionByName(name);
 		if (o == null)
 			return;
 		removeOption(o);
 	}
 
-	public String getName() {
+	protected String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	protected void setName(String name) {
 		this.name = name;
 	}
 
@@ -153,24 +153,24 @@ public class OptionSet implements Serializable {
 		private String name;
 		private float price;
 
-		public Option(String name, float price) {
+		protected Option(String name, float price) {
 			this.name = name;
 			this.price = price;
 		}
 
-		public String getName() {
+		protected String getName() {
 			return name;
 		}
 
-		public void setName(String name) {
+		protected void setName(String name) {
 			this.name = name;
 		}
 
-		public float getPrice() {
+		protected float getPrice() {
 			return price;
 		}
 
-		public void setPrice(float price) {
+		protected void setPrice(float price) {
 			this.price = price;
 		}
 

@@ -19,7 +19,7 @@ import model.Automotive;
 
 public class FileIO {
 
-	private final String START_OF_AUTOMOBILE_OBJECT = "-----";
+	private final String START_OF_AUTOMOTIVE_OBJECT = "-----";
 	private final String CAR_LABEL = "Car:";
 	private final String PRICE_LABEL = "Price:";
 	private final String OPTIONS_ATTR_LABEL = "Options:";
@@ -37,7 +37,7 @@ public class FileIO {
 				if (line == null)
 					eof = true;
 				else {
-					if (line.equals(START_OF_AUTOMOBILE_OBJECT)) {
+					if (line.equals(START_OF_AUTOMOTIVE_OBJECT)) {
 						auto = new Automotive();
 						scanningOptions = false;
 						continue;

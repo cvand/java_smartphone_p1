@@ -22,7 +22,8 @@ public class OptionSet implements Serializable {
 
 	public Option getOptionByName(String name) {
 		// look in the opt for an object with name = name
-		for (Option option : opt) {
+		for (int i = 0; i < currentSize; i++) {
+			Option option = this.opt[i];
 			if (option.getName().equals(name))
 				return option;
 		}
@@ -76,6 +77,10 @@ public class OptionSet implements Serializable {
 		if (index > -1) {
 			for (int i = index; i < this.currentSize - 1; i++) {
 				this.opt[i] = this.opt[i + 1];
+			}
+			
+			if (index == (currentSize - 1)) {
+				this.opt[index] = null;
 			}
 			
 			// update the current actual size of the array

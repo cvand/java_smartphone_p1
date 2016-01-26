@@ -7,16 +7,24 @@ package model;
 
 import java.io.Serializable;
 
+import model.OptionSet.Option;
+
 public class Automotive implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	String name;
-	OptionSet opset[];
+	private String name;
+	private float basePrice;
+	private OptionSet opset[];
 	private int currentSize = 0;
 
-	Automotive(int size, String n) {
-		opset = new OptionSet[size];
-		name = n;
+	public Automotive() {
+	}
+	
+	public Automotive(String name, float basePrice, int size) {
+		super();
+		this.name = name;
+		this.basePrice = basePrice;
+		this.opset = new OptionSet[size];
 	}
 
 	public String getName() {
@@ -27,8 +35,20 @@ public class Automotive implements Serializable {
 		this.name = name;
 	}
 
-	public OptionSet[] getOpset() {
-		return opset;
+	public OptionSet getOptionSet(int index) {
+		return opset[index];
+	}
+	
+	public float getBasePrice() {
+		return basePrice;
+	}
+
+	public void setBasePrice(float basePrice) {
+		this.basePrice = basePrice;
+	}
+	
+	public void setOptionSetSize(int size) {
+		this.opset = new OptionSet[size];
 	}
 
 	public void setOpset(OptionSet[] opset) {
@@ -38,6 +58,11 @@ public class Automotive implements Serializable {
 			if (opset[i] != null) currentSize++;
 			else break;
 		}
+	}
+	
+	public void updateOptionSet(OptionSet set, String newName) {
+		int index = getOptionSetIndex(set);
+		this.opset[index].setName(newName);
 	}
 	
 	public void addOptionSet(OptionSet opset) throws Exception {
@@ -51,6 +76,11 @@ public class Automotive implements Serializable {
 		}
 	}
 	
+	public void addOptionSet(String name, int size) throws Exception {
+		OptionSet set = new OptionSet(name, size);
+		addOptionSet(set);
+	}
+	
 	public Option getOptionInSet(String setName, String optName) throws Exception {
 		OptionSet set = getOptionSetByName(setName);
 		if (set == null) throw new Exception("No such OptionSet exists in this model.");
@@ -58,11 +88,18 @@ public class Automotive implements Serializable {
 		return set.getOptionByName(optName);
 	}
 	
-	public void addOptionInSet(String setName, Option opt) throws Exception {
+	public void updateOptionInSet(String setName, Option opt, String newName, float newPrice) throws Exception {
 		OptionSet set = getOptionSetByName(setName);
 		if (set == null) throw new Exception("No such OptionSet exists in this model.");
 		
-		set.addOption(opt);
+		set.updateOption(opt, newName, newPrice);
+	}
+	
+	public void addOptionInSet(String setName, String name, float price) throws Exception {
+		OptionSet set = getOptionSetByName(setName);
+		if (set == null) throw new Exception("No such OptionSet exists in this model.");
+		
+		set.addOption(name, price);
 	}
 	
 	public void removeOptionInSet(String setName, Option opt) throws Exception {
@@ -103,6 +140,10 @@ public class Automotive implements Serializable {
 			for (int i = index; i < this.currentSize - 1; i++) {
 				this.opset[i] = this.opset[i + 1];
 			}
+			
+			if (index == (currentSize - 1)) {
+				this.opset[index] = null;
+			}
 
 			// update the current actual size of the array
 			currentSize--;
@@ -121,6 +162,9 @@ public class Automotive implements Serializable {
 		sb.append("Automotive :: {");
 		sb.append("name: ");
 		sb.append(name);
+		sb.append(", ");
+		sb.append("basePrice: ");
+		sb.append(basePrice);
 		sb.append(", ");
 
 		// printing all the options of the optionSet

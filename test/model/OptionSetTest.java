@@ -5,10 +5,14 @@
 
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import model.OptionSet.Option;
 
 public class OptionSetTest {
 
@@ -21,10 +25,14 @@ public class OptionSetTest {
 
 	@Test
 	public void canAddOption() {
-		Option o = new Option("Fort Knox Gold Clearcoat Metallic", 0);
 		try {
-			set.addOption(o);
-			assertEquals(o, set.getOptionByName("Fort Knox Gold Clearcoat Metallic"));
+			set.addOption("Fort Knox Gold Clearcoat Metallic", 0);
+			
+			Option o = set.getOptionByName("Fort Knox Gold Clearcoat Metallic");
+			assertNotEquals(null, o);
+			assertEquals("Fort Knox Gold Clearcoat Metallic", o.getName());
+			assertEquals(0, o.getPrice(), 0);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Exception thrown");
@@ -34,30 +42,14 @@ public class OptionSetTest {
 	@Test(expected = Exception.class)
 	public void cannotAddOptionOverLimit() throws Exception {
 		for (int i = 0; i < 12; i++) {
-			Option o = new Option("Fort Knox Gold Clearcoat Metallic " + i, 0);
-			set.addOption(o);
+			set.addOption("Fort Knox Gold Clearcoat Metallic " + i, 0);
 		}
 	}
 
 	@Test
 	public void canDeleteOption() {
-		Option o = new Option("Fort Knox Gold Clearcoat Metallic", 0);
 		try {
-			set.addOption(o);
-			set.removeOption(o);
-			
-			assertEquals(null, set.getOptionByName("Fort Knox Gold Clearcoat Metallic"));
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail("Exception thrown");
-		}
-	}
-
-	@Test
-	public void canDeleteOptionByName() {
-		Option o = new Option("Fort Knox Gold Clearcoat Metallic", 0);
-		try {
-			set.addOption(o);
+			set.addOption("Fort Knox Gold Clearcoat Metallic", 0);
 			set.removeOptionByName("Fort Knox Gold Clearcoat Metallic");
 			
 			assertEquals(null, set.getOptionByName("Fort Knox Gold Clearcoat Metallic"));
@@ -67,14 +59,18 @@ public class OptionSetTest {
 		}
 	}
 
+
 	@Test
 	public void canFindOptionByName() {
-		Option o = new Option("Fort Knox Gold Clearcoat Metallic", 0);
 		try {
-			set.addOption(o);
-			Option result = set.getOptionByName("Fort Knox Gold Clearcoat Metallic");
+			set.addOption("Fort Knox Gold Clearcoat Metallic", 0);
+			Option o = set.getOptionByName("Fort Knox Gold Clearcoat Metallic");
 			
-			assertEquals(o, result);
+			assertNotEquals(null, o);
+			assertEquals("Fort Knox Gold Clearcoat Metallic", o.getName());
+			assertEquals(0, o.getPrice(), 0);
+
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Exception thrown");

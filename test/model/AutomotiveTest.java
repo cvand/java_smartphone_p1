@@ -5,10 +5,14 @@
 
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import model.OptionSet.Option;
 
 public class AutomotiveTest {
 
@@ -16,7 +20,7 @@ public class AutomotiveTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		auto = new Automotive(2, "Focus Wagon ZTW");
+		auto = new Automotive("Focus Wagon ZTW", 18445, 2);
 	}
 
 	@Test
@@ -66,10 +70,12 @@ public class AutomotiveTest {
 		try {
 			auto.addOptionSet(set);
 			
-			Option opt = new Option("Automatic", 0);
-			auto.addOptionInSet("Transmission", opt);
+			auto.addOptionInSet("Transmission", "Automatic", 0);
 			
-			assertEquals(opt, auto.getOptionInSet("Transmission", "Automatic"));
+			Option o = auto.getOptionInSet("Transmission", "Automatic");
+			assertNotEquals(null, o);
+			assertEquals("Automatic", o.getName());
+			assertEquals(0, o.getPrice(), 0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Exception thrown");
@@ -82,12 +88,13 @@ public class AutomotiveTest {
 		try {
 			auto.addOptionSet(set);
 			
-			Option opt = new Option("Automatic", 0);
-			Option opt2 = new Option("Manual", -815);
-			auto.addOptionInSet("Transmission", opt2);
-			auto.addOptionInSet("Transmission", opt);
+			auto.addOptionInSet("Transmission", "Manual", -815);
+			auto.addOptionInSet("Transmission", "Automatic", 0);
 			
-			assertEquals(opt, auto.getOptionInSet("Transmission", "Automatic"));
+			Option o = auto.getOptionInSet("Transmission", "Automatic");
+			assertNotEquals(null, o);
+			assertEquals("Automatic", o.getName());
+			assertEquals(0, o.getPrice(), 0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Exception thrown");
@@ -100,11 +107,11 @@ public class AutomotiveTest {
 		try {
 			auto.addOptionSet(set);
 			
-			Option opt = new Option("Automatic", 0);
-			Option opt2 = new Option("Manual", -815);
-			auto.addOptionInSet("Transmission", opt2);
-			auto.addOptionInSet("Transmission", opt);
-			auto.removeOptionInSet("Transmission", opt);
+			auto.addOptionInSet("Transmission", "Automatic", 0);
+			auto.addOptionInSet("Transmission", "Manual", -815);
+			
+			Option o = auto.getOptionInSet("Transmission", "Automatic");
+			auto.removeOptionInSet("Transmission", o);
 			
 			assertEquals(null, auto.getOptionInSet("Transmission", "Automatic"));
 		} catch (Exception e) {

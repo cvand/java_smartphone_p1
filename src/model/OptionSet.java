@@ -9,8 +9,8 @@ import java.io.Serializable;
 
 public class OptionSet implements Serializable {
 	private static final long serialVersionUID = 1L;
-	String name;
-	Option opt[];
+	private String name;
+	private Option opt[];
 	// currentSize holds the actual size of the opt array (the number of
 	// elements in the array that are not null)
 	private int currentSize = 0;
@@ -58,6 +58,26 @@ public class OptionSet implements Serializable {
 		}
 	}
 
+	public void updateOption(Option opt, String newName, float newPrice) {
+		// find the index of the option in the set and update the values
+		int index = getOptionIndex(opt);
+		if (index > -1) {
+			this.opt[index].setName(newName);
+			this.opt[index].setPrice(newPrice);
+		}
+	}
+
+	public void updateOption(String oldName, String newName, float newPrice) {
+		// find the option in the set and update the values
+		Option opt = getOptionByName(oldName);
+		updateOption(opt, newName, newPrice);
+	}
+	
+
+	public void addOption(String name, float price) throws Exception {
+		addOption(new Option(name, price));
+	}
+
 	public void addOption(Option opt) throws Exception {
 		// if the array has room for more objects
 		if (currentSize < this.opt.length) {
@@ -68,30 +88,31 @@ public class OptionSet implements Serializable {
 			throw new Exception("You are trying to add elements to a full array.");
 		}
 	}
-	
+
 	public void removeOption(Option opt) {
 		int index = getOptionIndex(opt);
-		
+
 		// if Option opt was found in the array, remove it and move all the
 		// remaining options after that one row above
 		if (index > -1) {
 			for (int i = index; i < this.currentSize - 1; i++) {
 				this.opt[i] = this.opt[i + 1];
 			}
-			
+
 			if (index == (currentSize - 1)) {
 				this.opt[index] = null;
 			}
-			
+
 			// update the current actual size of the array
 			currentSize--;
 		}
-		
+
 	}
 
 	public void removeOptionByName(String name) {
 		Option o = getOptionByName(name);
-		if (o == null) return;
+		if (o == null)
+			return;
 		removeOption(o);
 	}
 
@@ -127,58 +148,58 @@ public class OptionSet implements Serializable {
 		return sb.toString();
 	}
 
-}
+	class Option implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private String name;
+		private float price;
 
-class Option implements Serializable {
-	private static final long serialVersionUID = 1L;
-	String name;
-	float price;
+		public Option(String name, float price) {
+			this.name = name;
+			this.price = price;
+		}
 
-	public Option(String name, float price) {
-		this.name = name;
-		this.price = price;
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public float getPrice() {
+			return price;
+		}
+
+		public void setPrice(float price) {
+			this.price = price;
+		}
+
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Option :: {");
+			sb.append("name: ");
+			sb.append(name);
+			sb.append(", ");
+			sb.append("price: ");
+			sb.append(price);
+			sb.append("}");
+			return sb.toString();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Option))
+				return false;
+			Option o = (Option) obj;
+
+			if (!getName().equals(o.getName()))
+				return false;
+			if (getPrice() != o.getPrice())
+				return false;
+
+			return true;
+		}
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public float getPrice() {
-		return price;
-	}
-
-	public void setPrice(float price) {
-		this.price = price;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Option :: {");
-		sb.append("name: ");
-		sb.append(name);
-		sb.append(", ");
-		sb.append("price: ");
-		sb.append(price);
-		sb.append("}");
-		return sb.toString();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Option))
-			return false;
-		Option o = (Option) obj;
-
-		if (!name.equals(o.name))
-			return false;
-		if (price != o.price)
-			return false;
-
-		return true;
-	}
 }

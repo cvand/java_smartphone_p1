@@ -22,7 +22,6 @@ public class FileIO {
 	private final String START_OF_AUTOMOTIVE_OBJECT = "-----";
 	private final String CAR_LABEL = "Car:";
 	private final String PRICE_LABEL = "Price:";
-	private final String OPTIONS_ATTR_LABEL = "Options:";
 	private final String OPTIONS_LABEL = "OPTIONS";
 
 	public Automobile buildAutomobileObject(String filename) {
@@ -61,15 +60,12 @@ public class FileIO {
 
 					if (scanningOptions) {
 						// scanning options from the file
-						int n = calculateNumberOfOptions(value);
 						String optionSetName = key.replace(":", "");
-						if (n > 0) {
-							// add the optionSet to the automotive and then
-							// parse the line and gradually add options as they
-							// are found in the value string
-							auto.addOptionSet(optionSetName, n);
-							readOptionsForSet(auto, optionSetName, value);
-						}
+						// add the optionSet to the automotive and then
+						// parse the line and gradually add options as they
+						// are found in the value string
+						auto.addOptionSet(optionSetName);
+						readOptionsForSet(auto, optionSetName, value);
 
 					} else {
 						// scanning attributes of the automotive
@@ -94,25 +90,7 @@ public class FileIO {
 			float price = Float.parseFloat(value);
 			auto.setBasePrice(price);
 			break;
-		case OPTIONS_ATTR_LABEL:
-			int size = Integer.parseInt(value);
-			auto.setOptionSetSize(size);
-			break;
 		}
-	}
-
-	private int calculateNumberOfOptions(String line) {
-		int count = countOccurrencesInString(line, "},{");
-
-		if (count == 0) {
-			// make sure that there is at least one option
-			int c = countOccurrencesInString(line, "{\"");
-			if (c == 0)
-				return 0;
-		}
-		count++;
-
-		return count;
 	}
 
 	private void readOptionsForSet(Automobile auto, String setName, String optionsString) {
@@ -146,23 +124,6 @@ public class FileIO {
 			}
 		}
 
-	}
-
-	private int countOccurrencesInString(String str, String findStr) {
-		int lastIndex = 0;
-		int count = 0;
-
-		while (lastIndex != -1) {
-
-			lastIndex = str.indexOf(findStr, lastIndex);
-
-			if (lastIndex != -1) {
-				count++;
-				lastIndex += findStr.length();
-			}
-		}
-
-		return count;
 	}
 
 	public void serializeAutomotive(Automobile auto, String filename) throws FileNotFoundException, IOException {

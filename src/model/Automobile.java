@@ -6,25 +6,24 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import model.OptionSet.Option;
 
 public class Automobile implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private String name;
 	private float basePrice;
-	private OptionSet opset[];
-	private int currentSize = 0;
+	private ArrayList<OptionSet> opset = new ArrayList<OptionSet>();
 
 	public Automobile() {
 	}
-	
-	public Automobile(String name, float basePrice, int size) {
+
+	public Automobile(String name, float basePrice) {
 		super();
 		this.name = name;
 		this.basePrice = basePrice;
-		this.opset = new OptionSet[size];
 	}
 
 	public String getName() {
@@ -36,9 +35,9 @@ public class Automobile implements Serializable {
 	}
 
 	public OptionSet getOptionSet(int index) {
-		return opset[index];
+		return opset.get(index);
 	}
-	
+
 	public float getBasePrice() {
 		return basePrice;
 	}
@@ -46,74 +45,69 @@ public class Automobile implements Serializable {
 	public void setBasePrice(float basePrice) {
 		this.basePrice = basePrice;
 	}
-	
-	public void setOptionSetSize(int size) {
-		this.opset = new OptionSet[size];
+
+	public void setOpset(ArrayList<OptionSet> opset) {
+		this.opset = new ArrayList<OptionSet>();
+		// calculate the actual size of the array
+		for (int i = 0; i < opset.size(); i++) {
+			this.opset.add(opset.get(i));
+		}
 	}
 
-	public void setOpset(OptionSet[] opset) {
-		this.opset = opset;
-		// calculate the actual size of the array
-		for (int i = 0; i < opset.length; i++) {
-			if (opset[i] != null) currentSize++;
-			else break;
-		}
-	}
-	
 	public void updateOptionSet(String oldName, String newName) {
 		OptionSet set = getOptionSetByName(oldName);
-		if (set == null) return;
+		if (set == null)
+			return;
 		int index = getOptionSetIndex(set);
-		this.opset[index].setName(newName);
+		this.opset.get(index).setName(newName);
 	}
-	
+
 	public void addOptionSet(OptionSet opset) throws Exception {
-		// if the array has room for more objects
-		if (currentSize < this.opset.length) {
-			//add the object after the last non-null object
-			this.opset[currentSize] = opset;
-			currentSize++;
-		} else {
-			throw new Exception("You are trying to add elements to a full array.");
-		}
+		// add the object
+		this.opset.add(opset);
 	}
-	
-	public void addOptionSet(String name, int size) throws Exception {
-		OptionSet set = new OptionSet(name, size);
+
+	public void addOptionSet(String name) throws Exception {
+		OptionSet set = new OptionSet(name);
 		addOptionSet(set);
 	}
-	
+
 	public Option getOptionInSet(String setName, String optName) throws Exception {
 		OptionSet set = getOptionSetByName(setName);
-		if (set == null) throw new Exception("No such OptionSet exists in this model.");
-		
+		if (set == null)
+			throw new Exception("No such OptionSet exists in this model.");
+
 		return set.getOptionByName(optName);
 	}
-	
+
 	public void updateOptionInSet(String setName, String optName, String newName, float newPrice) throws Exception {
 		OptionSet set = getOptionSetByName(setName);
-		if (set == null) throw new Exception("No such OptionSet exists in this model.");
-		
+		if (set == null)
+			throw new Exception("No such OptionSet exists in this model.");
+
 		Option opt = set.getOptionByName(optName);
-		if (opt == null) throw new Exception("No such Option exists in this OptionSet in this model.");
-		
+		if (opt == null)
+			throw new Exception("No such Option exists in this OptionSet in this model.");
+
 		set.updateOption(opt, newName, newPrice);
 	}
-	
+
 	public void addOptionInSet(String setName, String name, float price) throws Exception {
 		OptionSet set = getOptionSetByName(setName);
-		if (set == null) throw new Exception("No such OptionSet exists in this model.");
-		
+		if (set == null)
+			throw new Exception("No such OptionSet exists in this model.");
+
 		set.addOption(name, price);
 	}
-	
+
 	public void removeOptionInSet(String setName, Option opt) throws Exception {
 		OptionSet set = getOptionSetByName(setName);
-		if (set == null) throw new Exception("No such OptionSet exists in this model.");
-		
+		if (set == null)
+			throw new Exception("No such OptionSet exists in this model.");
+
 		set.removeOption(opt);
 	}
-	
+
 	public OptionSet getOptionSetByName(String name) {
 		// look in the optset for an object with name = name
 		for (OptionSet optionSet : opset) {
@@ -122,12 +116,12 @@ public class Automobile implements Serializable {
 		}
 		return null;
 	}
-	
+
 	private int getOptionSetIndex(OptionSet opset) {
-		// Find the OptionSet opt in the array
+		// Find the OptionSet opt in the list
 		int index = -1;
-		for (int i = 0; i < this.opset.length; i++) {
-			OptionSet o = this.opset[i];
+		for (int i = 0; i < this.opset.size(); i++) {
+			OptionSet o = this.opset.get(i);
 			if (o == opset) {
 				index = i;
 				break;
@@ -135,32 +129,23 @@ public class Automobile implements Serializable {
 		}
 		return index;
 	}
-	
+
 	public void removeOptionSet(OptionSet opset) {
 		int index = getOptionSetIndex(opset);
-		
-		// if OptionSet opset was found in the array, remove it and move all the
-		// remaining optionSets after that one row above
-		if (index > -1) {
-			for (int i = index; i < this.currentSize - 1; i++) {
-				this.opset[i] = this.opset[i + 1];
-			}
-			
-			if (index == (currentSize - 1)) {
-				this.opset[index] = null;
-			}
 
-			// update the current actual size of the array
-			currentSize--;
+		// if OptionSet opset was found in the list, remove it
+		if (index > -1) {
+			this.opset.remove(index);
 		}
 	}
 
 	public void removeOptionSetByName(String name) {
 		OptionSet o = getOptionSetByName(name);
-		if (o == null) return;
+		if (o == null)
+			return;
 		removeOptionSet(o);
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -174,12 +159,10 @@ public class Automobile implements Serializable {
 
 		// printing all the options of the optionSet
 		sb.append("optionSets: [");
-		for (int i = 0; i < opset.length; i++) {
-			if (opset[i] != null) {
-				sb.append(opset[i]);
-				if (i < (opset.length - 1)) {
-					sb.append(", ");
-				}
+		for (int i = 0; i < opset.size(); i++) {
+			sb.append(opset.get(i));
+			if (i < (opset.size() - 1)) {
+				sb.append(", ");
 			}
 		}
 		sb.append("]");
@@ -187,5 +170,5 @@ public class Automobile implements Serializable {
 		sb.append("}");
 		return sb.toString();
 	}
-	
+
 }

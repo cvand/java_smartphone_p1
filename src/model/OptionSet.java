@@ -6,24 +6,21 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class OptionSet implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
-	private Option opt[];
-	// currentSize holds the actual size of the opt array (the number of
-	// elements in the array that are not null)
-	private int currentSize = 0;
+	private ArrayList<Option> opt = new ArrayList<Option>();
 
-	protected OptionSet(String n, int size) {
-		opt = new Option[size];
+	protected OptionSet(String n) {
 		name = n;
 	}
 
 	protected Option getOptionByName(String name) {
 		// look in the opt for an object with name = name
-		for (int i = 0; i < currentSize; i++) {
-			Option option = this.opt[i];
+		for (int i = 0; i < opt.size(); i++) {
+			Option option = this.opt.get(i);
 			if (option.getName().equals(name))
 				return option;
 		}
@@ -33,8 +30,8 @@ public class OptionSet implements Serializable {
 	private int getOptionIndex(Option opt) {
 		// Find the Option opt in the array
 		int index = -1;
-		for (int i = 0; i < this.opt.length; i++) {
-			Option o = this.opt[i];
+		for (int i = 0; i < this.opt.size(); i++) {
+			Option o = this.opt.get(i);
 			if (o == opt) {
 				index = i;
 				break;
@@ -43,18 +40,15 @@ public class OptionSet implements Serializable {
 		return index;
 	}
 
-	protected Option[] getOptions() {
+	protected ArrayList<Option> getOptions() {
 		return opt;
 	}
 
-	protected void setOptions(Option[] opt) {
-		this.opt = opt;
-		// calculate the actual size of the array
-		for (int i = 0; i < opt.length; i++) {
-			if (opt[i] != null)
-				currentSize++;
-			else
-				break;
+	protected void setOptions(ArrayList<Option> opt) {
+		this.opt = new ArrayList<Option>();
+		// copy every element to the option list
+		for (int i = 0; i < opt.size(); i++) {
+			this.opt.add(opt.get(i));
 		}
 	}
 
@@ -62,8 +56,8 @@ public class OptionSet implements Serializable {
 		// find the index of the option in the set and update the values
 		int index = getOptionIndex(opt);
 		if (index > -1) {
-			this.opt[index].setName(newName);
-			this.opt[index].setPrice(newPrice);
+			this.opt.get(index).setName(newName);
+			this.opt.get(index).setPrice(newPrice);
 		}
 	}
 
@@ -72,39 +66,21 @@ public class OptionSet implements Serializable {
 		Option opt = getOptionByName(oldName);
 		updateOption(opt, newName, newPrice);
 	}
-	
 
 	protected void addOption(String name, float price) throws Exception {
 		addOption(new Option(name, price));
 	}
 
 	protected void addOption(Option opt) throws Exception {
-		// if the array has room for more objects
-		if (currentSize < this.opt.length) {
-			// add the object after the last non-null object
-			this.opt[currentSize] = opt;
-			currentSize++;
-		} else {
-			throw new Exception("You are trying to add elements to a full array.");
-		}
+		// add the object
+		this.opt.add(opt);
 	}
 
 	protected void removeOption(Option opt) {
 		int index = getOptionIndex(opt);
 
-		// if Option opt was found in the array, remove it and move all the
-		// remaining options after that one row above
 		if (index > -1) {
-			for (int i = index; i < this.currentSize - 1; i++) {
-				this.opt[i] = this.opt[i + 1];
-			}
-
-			if (index == (currentSize - 1)) {
-				this.opt[index] = null;
-			}
-
-			// update the current actual size of the array
-			currentSize--;
+			this.opt.remove(index);
 		}
 
 	}
@@ -134,12 +110,10 @@ public class OptionSet implements Serializable {
 
 		// printing all the options of the optionSet
 		sb.append("options: [");
-		for (int i = 0; i < opt.length; i++) {
-			if (opt[i] != null) {
-				sb.append(opt[i]);
-				if (i < (opt.length - 1)) {
-					sb.append(", ");
-				}
+		for (int i = 0; i < opt.size(); i++) {
+			sb.append(opt.get(i));
+			if (i < (opt.size() - 1)) {
+				sb.append(", ");
 			}
 		}
 		sb.append("]");

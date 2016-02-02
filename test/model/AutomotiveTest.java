@@ -20,12 +20,12 @@ public class AutomotiveTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		auto = new Automobile("Focus Wagon ZTW", 18445, 2);
+		auto = new Automobile("Focus Wagon ZTW", 18445);
 	}
 
 	@Test
 	public void canAddOptionSet() {
-		OptionSet set = new OptionSet("Transmission", 2);
+		OptionSet set = new OptionSet("Transmission");
 		try {
 			auto.addOptionSet(set);
 			assertEquals(set, auto.getOptionSetByName("Transmission"));
@@ -37,10 +37,10 @@ public class AutomotiveTest {
 
 	@Test
 	public void canGetOptionSetByName() {
-		OptionSet set = new OptionSet("Transmission", 2);
+		OptionSet set = new OptionSet("Transmission");
 		try {
 			auto.addOptionSet(set);
-			OptionSet set2 = new OptionSet("Color", 10);
+			OptionSet set2 = new OptionSet("Color");
 			auto.addOptionSet(set2);
 			assertEquals(set, auto.getOptionSetByName("Transmission"));
 		} catch (Exception e) {
@@ -51,10 +51,10 @@ public class AutomotiveTest {
 	
 	@Test
 	public void canRemoveOptionSetByName() {
-		OptionSet set = new OptionSet("Transmission", 2);
+		OptionSet set = new OptionSet("Transmission");
 		try {
 			auto.addOptionSet(set);
-			OptionSet set2 = new OptionSet("Color", 10);
+			OptionSet set2 = new OptionSet("Color");
 			auto.addOptionSet(set2);
 			auto.removeOptionSetByName("Transmission");
 			assertEquals(null, auto.getOptionSetByName("Transmission"));
@@ -66,7 +66,7 @@ public class AutomotiveTest {
 	
 	@Test
 	public void canAddOption() {
-		OptionSet set = new OptionSet("Transmission", 2);
+		OptionSet set = new OptionSet("Transmission");
 		try {
 			auto.addOptionSet(set);
 			
@@ -84,7 +84,7 @@ public class AutomotiveTest {
 	
 	@Test
 	public void canGetOption() {
-		OptionSet set = new OptionSet("Transmission", 2);
+		OptionSet set = new OptionSet("Transmission");
 		try {
 			auto.addOptionSet(set);
 			
@@ -103,7 +103,7 @@ public class AutomotiveTest {
 	
 	@Test
 	public void canRemoveOption() {
-		OptionSet set = new OptionSet("Transmission", 2);
+		OptionSet set = new OptionSet("Transmission");
 		try {
 			auto.addOptionSet(set);
 			

@@ -20,7 +20,7 @@ public class OptionSetTest {
 
 	@Before
 	public void setUp() throws Exception {
-		set = new OptionSet("Color", 10);
+		set = new OptionSet("Color");
 	}
 
 	@Test
@@ -36,13 +36,6 @@ public class OptionSetTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Exception thrown");
-		}
-	}
-
-	@Test(expected = Exception.class)
-	public void cannotAddOptionOverLimit() throws Exception {
-		for (int i = 0; i < 12; i++) {
-			set.addOption("Fort Knox Gold Clearcoat Metallic " + i, 0);
 		}
 	}
 

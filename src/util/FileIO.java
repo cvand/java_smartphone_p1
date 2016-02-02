@@ -15,7 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.StringTokenizer;
 
-import model.Automotive;
+import model.Automobile;
 
 public class FileIO {
 
@@ -25,8 +25,8 @@ public class FileIO {
 	private final String OPTIONS_ATTR_LABEL = "Options:";
 	private final String OPTIONS_LABEL = "OPTIONS";
 
-	public Automotive buildAutomotiveObject(String filename) {
-		Automotive auto = null;
+	public Automobile buildAutomobileObject(String filename) {
+		Automobile auto = null;
 		boolean scanningOptions = false;
 		try {
 			FileReader file = new FileReader(filename);
@@ -38,7 +38,7 @@ public class FileIO {
 					eof = true;
 				else {
 					if (line.equals(START_OF_AUTOMOTIVE_OBJECT)) {
-						auto = new Automotive();
+						auto = new Automobile();
 						scanningOptions = false;
 						continue;
 					}
@@ -85,7 +85,7 @@ public class FileIO {
 		return auto;
 	}
 
-	private void readAutomotiveAttributes(Automotive auto, String key, String value) {
+	private void readAutomotiveAttributes(Automobile auto, String key, String value) {
 		switch (key) {
 		case CAR_LABEL:
 			auto.setName(value);
@@ -115,7 +115,7 @@ public class FileIO {
 		return count;
 	}
 
-	private void readOptionsForSet(Automotive auto, String setName, String optionsString) {
+	private void readOptionsForSet(Automobile auto, String setName, String optionsString) {
 		StringTokenizer st = new StringTokenizer(optionsString);
 		while (st.hasMoreTokens()) {
 			String option = st.nextToken("{");
@@ -165,15 +165,15 @@ public class FileIO {
 		return count;
 	}
 
-	public void serializeAutomotive(Automotive auto, String filename) throws FileNotFoundException, IOException {
+	public void serializeAutomotive(Automobile auto, String filename) throws FileNotFoundException, IOException {
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename));
 		out.writeObject(auto);
 		out.close();
 	}
 
-	public Automotive deserializeAutomotive(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
+	public Automobile deserializeAutomotive(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
-		Automotive newStaff = (Automotive) in.readObject();
+		Automobile newStaff = (Automobile) in.readObject();
 		in.close();
 		return newStaff;
 	}

@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 import model.OptionSet.Option;
 
-public class Automotive implements Serializable {
+public class Automobile implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
@@ -17,10 +17,10 @@ public class Automotive implements Serializable {
 	private OptionSet opset[];
 	private int currentSize = 0;
 
-	public Automotive() {
+	public Automobile() {
 	}
 	
-	public Automotive(String name, float basePrice, int size) {
+	public Automobile(String name, float basePrice, int size) {
 		super();
 		this.name = name;
 		this.basePrice = basePrice;
@@ -60,7 +60,9 @@ public class Automotive implements Serializable {
 		}
 	}
 	
-	public void updateOptionSet(OptionSet set, String newName) {
+	public void updateOptionSet(String oldName, String newName) {
+		OptionSet set = getOptionSetByName(oldName);
+		if (set == null) return;
 		int index = getOptionSetIndex(set);
 		this.opset[index].setName(newName);
 	}
@@ -88,9 +90,12 @@ public class Automotive implements Serializable {
 		return set.getOptionByName(optName);
 	}
 	
-	public void updateOptionInSet(String setName, Option opt, String newName, float newPrice) throws Exception {
+	public void updateOptionInSet(String setName, String optName, String newName, float newPrice) throws Exception {
 		OptionSet set = getOptionSetByName(setName);
 		if (set == null) throw new Exception("No such OptionSet exists in this model.");
+		
+		Option opt = set.getOptionByName(optName);
+		if (opt == null) throw new Exception("No such Option exists in this OptionSet in this model.");
 		
 		set.updateOption(opt, newName, newPrice);
 	}

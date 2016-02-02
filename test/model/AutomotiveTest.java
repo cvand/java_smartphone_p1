@@ -16,11 +16,11 @@ import model.OptionSet.Option;
 
 public class AutomotiveTest {
 
-	Automotive auto;
+	Automobile auto;
 	
 	@Before
 	public void setUp() throws Exception {
-		auto = new Automotive("Focus Wagon ZTW", 18445, 2);
+		auto = new Automobile("Focus Wagon ZTW", 18445, 2);
 	}
 
 	@Test

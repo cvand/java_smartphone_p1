@@ -5,24 +5,29 @@
 
 package adapter;
 
+import java.util.LinkedHashMap;
+
 import exception.AutoException;
 import model.Automobile;
 import util.FileIO;
 
 public abstract class ProxyAutomobile {
 
-	private static Automobile auto;
+	private static LinkedHashMap<String, Automobile> autos = new LinkedHashMap<String, Automobile>();
 
 	public void updateOptionSetName(String modelName, String optionSetName, String newName) {
-		// make sure that the modelName matches the name of the automobile
-		if (auto.getModel().equals(modelName)) {
+		// make sure that the modelName matches one of the name of the
+		// automobiles
+		Automobile auto = findAutomobile(modelName);
+		if (auto != null) {
 			boolean noError = false;
 			do {
 				try {
 					// rename the optionSet
 					auto.updateOptionSet(optionSetName, newName);
 				} catch (AutoException e) {
-					// exception handling in case there is no option set with that name in auto
+					// exception handling in case there is no option set with
+					// that name in auto
 					if (e.getType() == AutoException.ExceptionType.MISSING_OPTION_SET) {
 						e.fix(e.getType().getErrorNumber());
 						optionSetName = (String) e.getFix("setName");
@@ -32,9 +37,27 @@ public abstract class ProxyAutomobile {
 		}
 	}
 
+	private Automobile findAutomobile(String modelName) {
+		// fetch the automobile with key = modelName, if the map doesn't have
+		// one it'll return null
+		return autos.get(modelName);
+
+		// We can also iterate over the map of autos and see if there is an auto
+		// with name modelName
+		// Iterator<Automobile> it = autos.values().iterator();
+		// while (it.hasNext()) {
+		// Automobile currentAuto = it.next();
+		// if (currentAuto.getModel().equals(modelName)) {
+		// return currentAuto;
+		// }
+		// }
+		// return null;
+	}
+
 	public void updateOptionPrice(String modelName, String optionSetName, String option, Float newPrice) {
 		// make sure that the modelName matches the name of the automobile
-		if (auto.getModel().equals(modelName)) {
+		Automobile auto = findAutomobile(modelName);
+		if (auto != null) {
 			boolean noError = false;
 			do {
 				try {
@@ -45,15 +68,18 @@ public abstract class ProxyAutomobile {
 					noError = true;
 				} catch (AutoException e) {
 					if (e.getType() == AutoException.ExceptionType.MISSING_OPTION_SET) {
-						// exception handling in case there is no option set with that name in auto
+						// exception handling in case there is no option set
+						// with that name in auto
 						e.fix(e.getType().getErrorNumber());
 						optionSetName = (String) e.getFix("setName");
 					} else if (e.getType() == AutoException.ExceptionType.MISSING_OPTION) {
-						// exception handling in case there is no option with that name in auto
+						// exception handling in case there is no option with
+						// that name in auto
 						e.fix(e.getType().getErrorNumber());
 						option = (String) e.getFix("name");
-						
-						// deal with user entered an input that can't be converted to float
+
+						// deal with user entered an input that can't be
+						// converted to float
 						try {
 							newPrice = Float.parseFloat((String) e.getFix("price"));
 							auto.addOptionInSet(optionSetName, option, newPrice);
@@ -61,7 +87,8 @@ public abstract class ProxyAutomobile {
 							newPrice = null;
 						}
 					} else if (e.getType() == AutoException.ExceptionType.INVALID_INPUT) {
-						// deal with user entered an input that can't be converted to float
+						// deal with user entered an input that can't be
+						// converted to float
 						try {
 							newPrice = Float.parseFloat((String) e.getFix("price"));
 						} catch (Exception e1) {
@@ -81,8 +108,11 @@ public abstract class ProxyAutomobile {
 			try {
 
 				// Build Automobile Object from a file.
-				auto = fileIO.buildAutomobileObject(filename);
+				Automobile auto = fileIO.buildAutomobileObject(filename);
 				noError = true;
+				
+				// add the newly created model to the map
+				autos.put(auto.getModel(), auto);
 			} catch (AutoException e) {
 				// Figure out what type of exception was thrown and handle it by
 				// calling fix and getting any information needed from the fix
@@ -105,16 +135,18 @@ public abstract class ProxyAutomobile {
 	}
 
 	public void printAuto(String modelName) {
-		if (auto.getModel().equals(modelName)) {
+		Automobile auto = findAutomobile(modelName);
+		if (auto != null) {
 			System.out.println(auto);
 		}
 	}
-	
+
 	public String autoToString(String modelName) {
-		if (auto.getModel().equals(modelName)) {
+		Automobile auto = findAutomobile(modelName);
+		if (auto != null) {
 			return auto.toString();
 		}
 		return null;
 	}
-	
+
 }

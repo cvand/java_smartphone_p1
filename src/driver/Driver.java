@@ -5,9 +5,10 @@
 
 package driver;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import adapter.BuildAuto;
+import exception.AutoException;
 import model.Automobile;
 import util.FileIO;
 
@@ -16,13 +17,14 @@ public class Driver {
 	public static void main(String[] args) {
 		FileIO fileIO = new FileIO();
 		//Build Automobile Object from a file.
-		Automobile FordZTW = fileIO.buildAutomobileObject("input.txt");
-		
-		//Print attributes before serialization
-		System.out.println(FordZTW);
-		
-		//Serialize the object
+		Automobile FordZTW;
 		try {
+			FordZTW = fileIO.buildAutomobileObject("input.txt");
+			
+			//Print attributes before serialization
+			System.out.println(FordZTW);
+			
+			//Serialize the object
 			fileIO.serializeAutomotive(FordZTW, "auto.ser");
 			
 			//Deserialize the object and read it into memory.
@@ -30,9 +32,8 @@ public class Driver {
 			
 			//Print new attributes.
 			System.out.println(newFordZTW);
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		} catch (AutoException e1) {
+			e1.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

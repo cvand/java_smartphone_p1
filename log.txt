@@ -1,0 +1,18 @@
+2016-02-04 20:39:25.198	Exception with error code: 102: The filename is invalid.
+2016-02-04 20:40:21.331	Exception with error code: 103: The was an error reading the configuration file.
+2016-02-04 20:55:01.584	Exception with error code: 206: The price of this automobile is missing from configuration file.
+2016-02-04 20:55:05.582	Exception with error code: 206: The price of this automobile is missing from configuration file.
+2016-02-04 20:56:47.387	Exception with error code: 206: The price of this automobile is missing from configuration file.
+2016-02-04 21:09:10.978	Exception with error code: 206: The price of this automobile is missing from configuration file.
+2016-02-04 21:09:14.94	Exception with error code: 201: Option name is missing from configuration file.
+2016-02-04 21:10:44.612	Exception with error code: 206: The price of this automobile is missing from configuration file.
+2016-02-04 21:10:48.382	Exception with error code: 201: Option name is missing from configuration file.
+2016-02-04 21:18:41.255	Exception with error code: 202: Option price is invalid or missing from configuration file.
+2016-02-04 21:20:04.444	Exception with error code: 101: The file is missing.
+2016-02-04 21:21:42.141	Exception with error code: 101: The file is missing.
+2016-02-04 21:21:46.345	Exception with error code: 202: Option price is invalid or missing from configuration file.
+2016-02-04 21:21:50.155	Exception with error code: 206: The price of this automobile is missing from configuration file.
+2016-02-04 21:22:08.137	Exception with error code: 101: The file is missing.
+2016-02-04 21:22:11.966	Exception with error code: 202: Option price is invalid or missing from configuration file.
+2016-02-04 21:22:14.836	Exception with error code: 206: The price of this automobile is missing from configuration file.
+2016-02-04 21:22:18.14	Exception with error code: 201: Option name is missing from configuration file.

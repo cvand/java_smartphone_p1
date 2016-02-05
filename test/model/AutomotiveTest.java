@@ -20,7 +20,7 @@ public class AutomotiveTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		auto = new Automobile("Focus Wagon ZTW", 18445);
+		auto = new Automobile("Focus", "Wagon ZTW", 18445);
 	}
 
 	@Test

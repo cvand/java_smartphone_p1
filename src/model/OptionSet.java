@@ -12,9 +12,24 @@ public class OptionSet implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private ArrayList<Option> opt = new ArrayList<Option>();
+	
+	private Option optionChoice;
 
 	protected OptionSet(String n) {
 		name = n;
+	}
+	
+
+	public Option getOptionChoice() {
+		return optionChoice;
+	}
+
+	public void setOptionChoice(String option) {
+		for (Option o : opt) {
+			if (o.getName().equals(option)) {
+				this.optionChoice = o;
+			}
+		}
 	}
 
 	protected Option getOptionByName(String name) {
@@ -67,11 +82,11 @@ public class OptionSet implements Serializable {
 		updateOption(opt, newName, newPrice);
 	}
 
-	protected void addOption(String name, float price) throws Exception {
+	protected void addOption(String name, float price) {
 		addOption(new Option(name, price));
 	}
 
-	protected void addOption(Option opt) throws Exception {
+	protected void addOption(Option opt) {
 		// add the object
 		this.opt.add(opt);
 	}
@@ -117,7 +132,11 @@ public class OptionSet implements Serializable {
 			}
 		}
 		sb.append("]");
-
+		sb.append(", ");
+		sb.append("optionChoice: ");
+		sb.append(optionChoice);
+		
+		
 		sb.append("}");
 		return sb.toString();
 	}

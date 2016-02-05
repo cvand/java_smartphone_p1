@@ -7,7 +7,6 @@ package driver;
 
 import java.io.IOException;
 
-import adapter.BuildAuto;
 import exception.AutoException;
 import model.Automobile;
 import util.FileIO;

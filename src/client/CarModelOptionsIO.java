@@ -16,6 +16,7 @@ import java.util.Properties;
 import model.Automobile;
 
 public class CarModelOptionsIO {
+	SelectCarOption carOption = new SelectCarOption();
 
 	public CarModelOptionsIO() {
 
@@ -31,7 +32,7 @@ public class CarModelOptionsIO {
 				do {
 					option = menu();
 					if (option.equals("3")) {
-						System.out.println("No configuration found.");
+						carOption.printOptions();
 					}
 				} while (option.equals("3"));
 				sendOutput(option);
@@ -65,12 +66,13 @@ public class CarModelOptionsIO {
 
 						sendOutput(props);
 					} else if (strInput.contains("autoSaved")) {
+						// automobile saved in the server, return to main menu
 						System.out.println("Automobile saved!");
 						String option = null;
 						do {
 							option = menu();
 							if (option.equals("3")) {
-								System.out.println("No configuration found.");
+								carOption.printOptions();
 							}
 						} while (option.equals("3"));
 						sendOutput(option);
@@ -79,17 +81,12 @@ public class CarModelOptionsIO {
 				
 				if (obj instanceof List) {
 					List<String> autos = (ArrayList<String>) obj;
-					System.out.println("The list of available automobiles is:");
-					for (String a : autos) {
-						System.out.println(a);
-					}
-					String modelName = readInputFromUser("Please select one automobile by entering its name:");
-					String m = "modelName:" + modelName;
-					sendOutput(m);
+					carOption = new SelectCarOption();
+					sendOutput(carOption.selectAutomobileFromList(autos));
 				} else if (obj instanceof Automobile) {
 					Automobile a = (Automobile) obj;
 					System.out.println("Configuration started. (to finish editing, type done)");
-					SelectCarOption carOption = new SelectCarOption(a);
+					carOption.setAutomobile(a);
 					
 					String option = null;
 					do {

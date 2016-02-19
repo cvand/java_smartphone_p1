@@ -82,7 +82,7 @@ public class OptionSet implements Serializable {
 		updateOption(opt, newName, newPrice);
 	}
 
-	protected void addOption(String name, float price) {
+	protected void addOption(String name, Float price) {
 		addOption(new Option(name, price));
 	}
 
@@ -144,9 +144,9 @@ public class OptionSet implements Serializable {
 	class Option implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private String name;
-		private float price;
+		private Float price;
 
-		protected Option(String name, float price) {
+		protected Option(String name, Float price) {
 			this.name = name;
 			this.price = price;
 		}
@@ -159,11 +159,11 @@ public class OptionSet implements Serializable {
 			this.name = name;
 		}
 
-		protected float getPrice() {
+		protected Float getPrice() {
 			return price;
 		}
 
-		protected void setPrice(float price) {
+		protected void setPrice(Float price) {
 			this.price = price;
 		}
 

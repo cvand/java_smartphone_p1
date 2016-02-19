@@ -27,6 +27,7 @@ public class AutoException extends Exception implements FixAuto {
 		INVALID_FILENAME(102), 
 		IO_EXCEPTION(103), 
 		INVALID_INPUT(104), 
+		INVALID_FILETYPE(105), 
 
 		MISSING_OPTION_NAME(201), 
 		MISSING_OPTION_PRICE(202), 
@@ -100,6 +101,15 @@ public class AutoException extends Exception implements FixAuto {
 			System.out.println(errormsg);
 			s = FixHelper.readInputFromUser(null);
 			fix.put("value", s);
+			
+			break;
+		case 105:
+			// INVALID_FILETYPE
+			System.out.println(errormsg);
+			s = FixHelper.readInputFromUser("filename");
+			fix.put("filename", s);
+			s = FixHelper.readInputFromUser("filetype");
+			fix.put("filetype", s);
 			
 			break;
 		case 201:

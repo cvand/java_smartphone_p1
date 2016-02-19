@@ -16,3 +16,32 @@
 2016-02-04 21:22:11.966	Exception with error code: 202: Option price is invalid or missing from configuration file.
 2016-02-04 21:22:14.836	Exception with error code: 206: The price of this automobile is missing from configuration file.
 2016-02-04 21:22:18.14	Exception with error code: 201: Option name is missing from configuration file.
+2016-02-13 19:09:31.061	Exception with error code: 101: The file is missing.
+2016-02-13 19:40:45.43	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 19:42:24.694	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 19:54:20.807	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 19:54:27.564	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 19:54:32.95	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 19:54:39.156	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:04:19.07	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:04:46.594	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:04:54.99	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:05:04.289	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:05:11.091	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:05:17.455	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:05:25.331	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:05:31.156	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:05:35.448	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:06:56.878	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:07:03.929	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:07:20.709	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:07:28.375	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:07:34.095	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:07:42.492	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:08:10.939	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:08:23.232	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:08:44.904	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:13:02.83	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:14:17.181	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-13 20:14:31.435	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
+2016-02-18 16:20:09.283	Exception with error code: 101: The file is missing.

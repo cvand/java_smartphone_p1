@@ -7,6 +7,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import exception.AutoException;
 import model.OptionSet.Option;
@@ -16,7 +17,7 @@ public class Automobile implements Serializable {
 
 	private String make;
 	private String model;
-	private float basePrice;
+	private Float basePrice;
 	private ArrayList<OptionSet> opset = new ArrayList<OptionSet>();
 
 	private ArrayList<OptionSet> userChoice = new ArrayList<OptionSet>();
@@ -24,38 +25,42 @@ public class Automobile implements Serializable {
 	public Automobile() {
 	}
 
-	public Automobile(String make, String model, float basePrice) {
+	public Automobile(String make, String model, Float basePrice) {
 		super();
 		this.make = make;
 		this.model = model;
 		this.basePrice = basePrice;
 	}
 
-	public String getMake() {
+	public synchronized String getMake() {
 		return make;
 	}
 
-	public void setMake(String make) {
+	public synchronized void setMake(String make) {
 		this.make = make;
 	}
 
-	public OptionSet getOptionSet(int index) {
+	public synchronized OptionSet getOptionSet(int index) {
 		return opset.get(index);
 	}
+	
+	public synchronized int getOptionSetCount() {
+		return opset.size();
+	}
 
-	public String getModel() {
+	public synchronized String getModel() {
 		return model;
 	}
 
-	public void setModel(String model) {
+	public synchronized void setModel(String model) {
 		this.model = model;
 	}
 	
-	public float getBasePrice() {
+	public Float getBasePrice() {
 		return basePrice;
 	}
 
-	public float getTotalPrice() {
+	public synchronized float getTotalPrice() {
 		float totalPrice = basePrice;
 		for (OptionSet set : userChoice) {
 			Option option = set.getOptionChoice();
@@ -67,11 +72,11 @@ public class Automobile implements Serializable {
 		return totalPrice;
 	}
 
-	public void setBasePrice(float basePrice) {
+	public synchronized void setBasePrice(Float basePrice) {
 		this.basePrice = basePrice;
 	}
 
-	public void setOpset(ArrayList<OptionSet> opset) {
+	public synchronized void setOpset(ArrayList<OptionSet> opset) {
 		this.opset = new ArrayList<OptionSet>();
 		// calculate the actual size of the array
 		for (int i = 0; i < opset.size(); i++) {
@@ -79,7 +84,7 @@ public class Automobile implements Serializable {
 		}
 	}
 
-	public void updateOptionSet(String oldName, String newName) throws AutoException {
+	public synchronized void updateOptionSet(String oldName, String newName) throws AutoException {
 		OptionSet set = getOptionSetByName(oldName);
 		if (set == null)
 			throw new AutoException(AutoException.ExceptionType.MISSING_OPTION_SET, "This option set doesn't exist in this automobile configuration.").set("name", oldName);
@@ -87,17 +92,17 @@ public class Automobile implements Serializable {
 		this.opset.get(index).setName(newName);
 	}
 
-	public void addOptionSet(OptionSet opset)  {
+	public synchronized void addOptionSet(OptionSet opset)  {
 		// add the object
 		this.opset.add(opset);
 	}
 
-	public void addOptionSet(String name) {
+	public synchronized void addOptionSet(String name) {
 		OptionSet set = new OptionSet(name);
 		addOptionSet(set);
 	}
 
-	public Option getOptionInSet(String setName, String optName) throws AutoException {
+	public synchronized Option getOptionInSet(String setName, String optName) throws AutoException {
 		OptionSet set = getOptionSetByName(setName);
 		if (set == null)
 			throw new AutoException(AutoException.ExceptionType.MISSING_OPTION_SET, "This option set doesn't exist in this automobile configuration.").set("name", setName);
@@ -105,7 +110,7 @@ public class Automobile implements Serializable {
 		return set.getOptionByName(optName);
 	}
 
-	public void updateOptionInSet(String setName, String optName, String newName, float newPrice) throws AutoException {
+	public synchronized void updateOptionInSet(String setName, String optName, String newName, Float newPrice) throws AutoException {
 		OptionSet set = getOptionSetByName(setName);
 		if (set == null)
 			throw new AutoException(AutoException.ExceptionType.MISSING_OPTION_SET, "This option set doesn't exist in this automobile configuration.").set("name", setName);
@@ -114,10 +119,20 @@ public class Automobile implements Serializable {
 		if (opt == null)
 			throw new AutoException(AutoException.ExceptionType.MISSING_OPTION, "This option doesn't exist in this option set in this automobile configuration.").set("name", optName);
 
+		// If the newName is null, then the user wants to update only the price
+		if (newName == null) {
+			newName = opt.getName();
+		}
+		
+		// If the price is null, then the user wants to update only the name
+		if (newPrice == null) {
+			newPrice = opt.getPrice();
+		}
+		
 		set.updateOption(opt, newName, newPrice);
 	}
 
-	public void addOptionInSet(String setName, String name, float price) throws AutoException {
+	public synchronized void addOptionInSet(String setName, String name, Float price) throws AutoException {
 		OptionSet set = getOptionSetByName(setName);
 		if (set == null)
 			throw new AutoException(AutoException.ExceptionType.MISSING_OPTION_SET, "This option set doesn't exist in this automobile configuration.").set("name", setName);
@@ -125,7 +140,7 @@ public class Automobile implements Serializable {
 		set.addOption(name, price);
 	}
 
-	public void removeOptionInSet(String setName, Option opt) throws AutoException {
+	public synchronized void removeOptionInSet(String setName, Option opt) throws AutoException {
 		OptionSet set = getOptionSetByName(setName);
 		if (set == null)
 			throw new AutoException(AutoException.ExceptionType.MISSING_OPTION_SET, "This option set doesn't exist in this automobile configuration.").set("name", setName);
@@ -133,7 +148,7 @@ public class Automobile implements Serializable {
 		set.removeOption(opt);
 	}
 
-	public OptionSet getOptionSetByName(String name) {
+	public synchronized OptionSet getOptionSetByName(String name) {
 		// look in the optset for an object with name = name
 		for (OptionSet optionSet : opset) {
 			if (optionSet.getName().equals(name))
@@ -155,7 +170,7 @@ public class Automobile implements Serializable {
 		return index;
 	}
 
-	public void removeOptionSet(OptionSet opset) {
+	public synchronized void removeOptionSet(OptionSet opset) {
 		int index = getOptionSetIndex(opset);
 
 		// if OptionSet opset was found in the list, remove it
@@ -164,14 +179,14 @@ public class Automobile implements Serializable {
 		}
 	}
 
-	public void removeOptionSetByName(String name) {
+	public synchronized void removeOptionSetByName(String name) {
 		OptionSet o = getOptionSetByName(name);
 		if (o == null)
 			return;
 		removeOptionSet(o);
 	}
 	
-	public String getOptionChoice(String setName) {
+	public synchronized String getOptionChoice(String setName) {
 		for (OptionSet set : userChoice) {
 			if (set.getName().equals(setName)) {
 				return set.getOptionChoice().getName();
@@ -180,7 +195,11 @@ public class Automobile implements Serializable {
 		return null;
 	}
 	
-	public float getOptionChoicePrice(String setName) {
+	public synchronized int getOptionChoiceCount() {
+		return userChoice.size();
+	}
+	
+	public synchronized float getOptionChoicePrice(String setName) {
 		for (OptionSet set : userChoice) {
 			if (set.getName().equals(setName)) {
 				return set.getOptionChoice().getPrice();
@@ -189,7 +208,7 @@ public class Automobile implements Serializable {
 		return 0;
 	}
 	
-	public void setOptionChoice(String setName, String optionName) {
+	public synchronized void setOptionChoice(String setName, String optionName) {
 		for (OptionSet set : userChoice) {
 			if (set.getName().equals(setName)) {
 				set.setOptionChoice(optionName);
@@ -198,7 +217,7 @@ public class Automobile implements Serializable {
 		}
 		
 		// if optionSet not in the userChoise, find the set and add it
-		OptionSet set = getOptionSetByName(optionName);
+		OptionSet set = getOptionSetByName(setName);
 		if (set == null) return;
 		set.setOptionChoice(optionName);
 		userChoice.add(set);
@@ -240,6 +259,54 @@ public class Automobile implements Serializable {
 		
 		sb.append("}");
 		return sb.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Automobile)) return false;
+		Automobile auto = (Automobile) obj;
+		
+		if (!this.make.equals(auto.getMake())) return false;
+		if (!this.model.equals(auto.getModel())) return false;
+		if (this.basePrice != auto.getBasePrice()) return false;
+		
+		if (!equalOptionSets(auto)) return false;
+		if (!equalOptionSetChoices(auto)) return false;
+		
+		return true;
+	}
+
+	private boolean equalOptionSets(Automobile auto) {
+		if (opset.size() != auto.getOptionSetCount()) return false;
+		
+		for (OptionSet optionSet : opset) {
+			if (auto.getOptionSetByName(optionSet.getName()) == null) return false;
+			if (!equalOptions(optionSet, auto.getOptionSetByName(optionSet.getName()))) return false;
+		}
+		return true;
+	}
+
+	private boolean equalOptions(OptionSet optionSet, OptionSet autoOptionSet) {
+		List<Option> options = optionSet.getOptions();
+		List<Option> autoOptions = autoOptionSet.getOptions();
+		if (options.size() != autoOptions.size()) return false;
+		
+		for (Option option : options) {
+			if (!autoOptions.contains(option)) return false;
+		}
+		
+		return true;
+	}
+
+	private boolean equalOptionSetChoices(Automobile auto) {
+		if (auto.getOptionChoiceCount() != this.userChoice.size()) return false;
+		
+		for (OptionSet optionSet : userChoice) {
+			String setName = optionSet.getName();
+			if (auto.getOptionChoice(setName) == null) return false;
+			if (this.getOptionChoice(setName) != auto.getOptionChoice(setName)) return false;
+		}
+		return true;
 	}
 
 }

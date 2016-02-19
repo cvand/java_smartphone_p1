@@ -20,7 +20,7 @@ public class AutomotiveTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		auto = new Automobile("Focus", "Wagon ZTW", 18445);
+		auto = new Automobile("Focus", "Wagon ZTW", (float) 18445);
 	}
 
 	@Test
@@ -70,7 +70,7 @@ public class AutomotiveTest {
 		try {
 			auto.addOptionSet(set);
 			
-			auto.addOptionInSet("Transmission", "Automatic", 0);
+			auto.addOptionInSet("Transmission", "Automatic", (float) 0);
 			
 			Option o = auto.getOptionInSet("Transmission", "Automatic");
 			assertNotEquals(null, o);
@@ -88,8 +88,8 @@ public class AutomotiveTest {
 		try {
 			auto.addOptionSet(set);
 			
-			auto.addOptionInSet("Transmission", "Manual", -815);
-			auto.addOptionInSet("Transmission", "Automatic", 0);
+			auto.addOptionInSet("Transmission", "Manual", (float) -815);
+			auto.addOptionInSet("Transmission", "Automatic", (float) 0);
 			
 			Option o = auto.getOptionInSet("Transmission", "Automatic");
 			assertNotEquals(null, o);
@@ -107,8 +107,8 @@ public class AutomotiveTest {
 		try {
 			auto.addOptionSet(set);
 			
-			auto.addOptionInSet("Transmission", "Automatic", 0);
-			auto.addOptionInSet("Transmission", "Manual", -815);
+			auto.addOptionInSet("Transmission", "Automatic", (float) 0);
+			auto.addOptionInSet("Transmission", "Manual", (float) -815);
 			
 			Option o = auto.getOptionInSet("Transmission", "Automatic");
 			auto.removeOptionInSet("Transmission", o);

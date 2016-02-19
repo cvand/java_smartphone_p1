@@ -47,7 +47,10 @@ public class FileIO {
 		// The accepted fileTypes are: properties and custom
 		// In any other case, the application throws an exception
 		if ("properties".equals(fileType)) {
-			auto = readPropertiesFile(filename);
+			Properties props = readPropertiesFile(filename);
+			if (props != null) {
+				auto = buildAutomobileObject(props);
+			}
 		} else if ("custom".equals(fileType)) {
 			auto = readCustomFile(filename);
 		} else {
@@ -247,7 +250,7 @@ public class FileIO {
 						auto.setBasePrice(price);
 					} catch (Exception ex) {
 						// wrong input parsed
-						auto.setBasePrice((float)0);
+						auto.setBasePrice((float) 0);
 					}
 				}
 			}
@@ -256,21 +259,25 @@ public class FileIO {
 		return auto;
 	}
 
-	private Automobile readPropertiesFile(String filename) throws AutoException {
-		Automobile auto = new Automobile();
+	private Properties readPropertiesFile(String filename) throws AutoException {
 		Properties props = new Properties();
 		try {
-			
+
 			FileInputStream in = new FileInputStream(filename);
 			props.load(in);
-			parseProperties(props, auto);
-			
+			return props;
+
 		} catch (FileNotFoundException e) {
 			throw new AutoException(AutoException.ExceptionType.MISSING_FILE, "The file is missing.").set("filename", filename);
 		} catch (IOException e) {
 			throw new AutoException(AutoException.ExceptionType.IO_EXCEPTION, "The was an error reading the configuration file.").set("filename",
 					filename);
 		}
+	}
+
+	public Automobile buildAutomobileObject(Properties props) {
+		Automobile auto = new Automobile();
+		parseProperties(props, auto);
 
 		return auto;
 	}
@@ -278,14 +285,15 @@ public class FileIO {
 	private void parseProperties(Properties props, Automobile auto) {
 		// parse through all the properties of the file
 		Enumeration<?> en = props.propertyNames();
-		// Every time we find an Option# key we save it and the following OptionValue# properties are going to be added to that optionSet
-//		String setName = null;
-		
+		// Every time we find an Option# key we save it and the following
+		// OptionValue# properties are going to be added to that optionSet
+		// String setName = null;
+
 		Map<String, String> optionSetMap = new HashMap<String, String>();
-		
+
 		while (en.hasMoreElements()) {
 			String key = (String) en.nextElement();
-			
+
 			// check what the current property key is
 			if (PROP_CAR_MAKE.equals(key)) {
 				auto.setMake(props.getProperty(key));
@@ -296,17 +304,19 @@ public class FileIO {
 			} else if (key.contains(PROP_OPTION_VALUE)) {
 				boolean noError = false;
 				do {
-					// remove from the key all non numeric characters and find the corrsponding optionSet name in the optionSetMap
+					// remove from the key all non numeric characters and find
+					// the corrsponding optionSet name in the optionSetMap
 					String k = key.replaceAll("[^\\d.]", "");
 					String setName = optionSetMap.get(k);
 					try {
-						
+
 						auto.addOptionInSet(setName, props.getProperty(key), null);
 						noError = true;
 					} catch (AutoException e) {
-						// if an exception is thrown it's gonna be from auto.addOptionInSet()
+						// if an exception is thrown it's gonna be from
+						// auto.addOptionInSet()
 						// which throws an AutoException.
-						
+
 						// Deal with the exception based on type
 						if (e instanceof AutoException) {
 							AutoException e1 = (AutoException) e;
@@ -317,13 +327,14 @@ public class FileIO {
 						}
 					}
 				} while (!noError);
-				
+
 				continue;
 			} else if (key.contains(PROP_OPTION)) {
 				String setName = props.getProperty(key);
 				auto.addOptionSet(setName);
-				
-				// remove from the key all non numeric characters and make that number the key for the optionSetMap
+
+				// remove from the key all non numeric characters and make that
+				// number the key for the optionSetMap
 				optionSetMap.put(key.replaceAll("[^\\d.]", ""), setName);
 				continue;
 			}

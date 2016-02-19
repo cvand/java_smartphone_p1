@@ -5,7 +5,12 @@
 
 package adapter;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 
 import exception.AutoException;
 import model.Automobile;
@@ -145,6 +150,30 @@ public abstract class ProxyAutomobile {
 			return auto.toString();
 		}
 		return null;
+	}
+
+	public Automobile createAutomobileFromProperties(Properties properties) {
+		FileIO fileIO = new FileIO();
+		// Build Automobile Object from a properties object.
+		Automobile auto = fileIO.buildAutomobileObject(properties);
+		return auto;
+	}
+
+	public void saveAutomobile(Automobile auto) {
+		autos.put(auto.getModel(), auto);
+	}
+
+	public List<String> getAvailableModels() {
+		List<String> models = new ArrayList<String>();
+		models.addAll(autos.keySet());
+
+		return models;
+	}
+
+	public String getSerializedAutomobile(String modelName) {
+		Automobile auto = autos.get(modelName);
+		if (auto == null) return null;
+		return auto.toString();
 	}
 
 }

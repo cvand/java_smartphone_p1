@@ -308,5 +308,20 @@ public class Automobile implements Serializable {
 		}
 		return true;
 	}
+	
+	public String choicesToString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(make);
+		sb.append(" ");
+		sb.append(model);
+		for (OptionSet set : userChoice) {
+			sb.append(set.getName());
+			sb.append(": ");
+			sb.append(getOptionChoice(set.getName()));
+			sb.append("\n");
+		}
+		
+		return sb.toString();
+	}
 
 }

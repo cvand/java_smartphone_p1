@@ -5,18 +5,13 @@
 
 package driver;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 import adapter.BuildAuto;
 import exception.AutoException;
 import model.Automobile;
 import scale.EditOptions;
-import server.BuildCarModelOptions;
+import server.Server;
 import util.FileIO;
 
 public class Driver {
@@ -32,19 +27,7 @@ public class Driver {
 	
 	public static void testServerSocket() {
 		
-	}
-	
-	private static String readInputFromUser(String message) {
-		System.out.println(message);
-
-		// read user input for a new filename
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			return br.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		new Server();
 	}
 	
 	public static void testSerialEditOptions() {

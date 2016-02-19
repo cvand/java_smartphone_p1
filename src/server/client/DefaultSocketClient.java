@@ -3,22 +3,19 @@
  *
  */
 
-package client;
+package server.client;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class DefaultSocketClient extends Thread implements SocketClientInterface, SocketClientConstants {
 
-	private BufferedReader reader;
-	private PrintWriter writer;
+	private ObjectInputStream reader;
+	private ObjectOutputStream writer;
 	private Socket sock;
 	private String strHost;
 	private int iPort;
@@ -51,8 +48,8 @@ public class DefaultSocketClient extends Thread implements SocketClientInterface
 			return false;
 		}
 		try {
-			writer = new PrintWriter(sock.getOutputStream(), true);
-			reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			writer = new ObjectOutputStream(sock.getOutputStream());
+			reader = new ObjectInputStream(sock.getInputStream());
 		} catch (Exception e) {
 			if (DEBUG)
 				System.err.println("Unable to obtain stream to/from " + strHost);
@@ -62,28 +59,41 @@ public class DefaultSocketClient extends Thread implements SocketClientInterface
 	}
 
 	public void handleSession() {
-		String strInput = "";
-		if (DEBUG)
-			System.out.println("Handling session with " + strHost + ":" + iPort);
-		try {
-			while ((strInput = reader.readLine()) != null)
-				handleInput(strInput);
-		} catch (IOException e) {
-			if (DEBUG)
-				System.out.println("Handling session with " + strHost + ":" + iPort);
+		Object obj = null;
+		while ((obj = deserializeObject()) != null) {
+			handleInput(obj);
+			
+			if ((obj instanceof String) && ((String) obj).equals("Bye")) {
+				break;
+			}
 		}
 	}
 
-	public void sendOutput(String strOutput) {
-		writer.write(strOutput, 0, strOutput.length());
+	public void sendOutput(Object object) {
+		try {
+			writer.writeObject(object);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void handleInput(String strInput) {
-		System.out.println(strInput);
+	public Object deserializeObject() {
+		try {
+			return reader.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void handleInput(Object input) {
+		System.out.println(input);
 	}
 
 	public void closeSession() {
 		try {
+			writer.close();
+			reader.close();
 			writer = null;
 			reader = null;
 			sock.close();

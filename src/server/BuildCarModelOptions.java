@@ -8,12 +8,13 @@ package server;
 import java.util.List;
 import java.util.Properties;
 
+import adapter.AutoServer;
 import adapter.BuildAuto;
 import model.Automobile;
 
 public class BuildCarModelOptions implements AutoServer{
 	
-	BuildAuto ba;
+	private BuildAuto ba;
 	
 	public BuildCarModelOptions(BuildAuto ba) {
 		this.ba = ba;
@@ -30,8 +31,8 @@ public class BuildCarModelOptions implements AutoServer{
 	}
 
 	@Override
-	public String getSerializedAutomobile(String modelName) {
-		return ba.getSerializedAutomobile(modelName);
+	public Automobile getAutomobile(String modelName) {
+		return ba.getAutomobile(modelName);
 	}
 
 	@Override

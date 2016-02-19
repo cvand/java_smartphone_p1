@@ -45,3 +45,4 @@
 2016-02-13 20:14:17.181	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
 2016-02-13 20:14:31.435	Exception with error code: 203: This option doesn't exist in this option set in this automobile configuration.
 2016-02-18 16:20:09.283	Exception with error code: 101: The file is missing.
+2016-02-19 02:29:23.128	Exception with error code: 204: This option set doesn't exist in this automobile configuration.

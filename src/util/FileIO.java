@@ -287,7 +287,6 @@ public class FileIO {
 		Enumeration<?> en = props.propertyNames();
 		// Every time we find an Option# key we save it and the following
 		// OptionValue# properties are going to be added to that optionSet
-		// String setName = null;
 
 		Map<String, String> optionSetMap = new HashMap<String, String>();
 
@@ -297,11 +296,26 @@ public class FileIO {
 			// check what the current property key is
 			if (PROP_CAR_MAKE.equals(key)) {
 				auto.setMake(props.getProperty(key));
-				continue;
 			} else if (PROP_CAR_MODEL.equals(key)) {
 				auto.setModel(props.getProperty(key));
-				continue;
 			} else if (key.contains(PROP_OPTION_VALUE)) {
+				// skip those properties for the next iteration
+			}else if (key.contains(PROP_OPTION)) {
+				String setName = props.getProperty(key);
+				auto.addOptionSet(setName);
+
+				// remove from the key all non numeric characters and make that
+				// number the key for the optionSetMap
+				optionSetMap.put(key.replaceAll("[^\\d.]", ""), setName);
+			}
+		}
+
+		// reset the enumerator and add the option values now that the
+		// optionSetMap is filled with all the options
+		en = props.propertyNames();
+		while (en.hasMoreElements()) {
+			String key = (String) en.nextElement();
+			if (key.contains(PROP_OPTION_VALUE)) {
 				boolean noError = false;
 				do {
 					// remove from the key all non numeric characters and find
@@ -327,16 +341,6 @@ public class FileIO {
 						}
 					}
 				} while (!noError);
-
-				continue;
-			} else if (key.contains(PROP_OPTION)) {
-				String setName = props.getProperty(key);
-				auto.addOptionSet(setName);
-
-				// remove from the key all non numeric characters and make that
-				// number the key for the optionSetMap
-				optionSetMap.put(key.replaceAll("[^\\d.]", ""), setName);
-				continue;
 			}
 		}
 	}

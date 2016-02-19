@@ -3,7 +3,7 @@
  *
  */
 
-package server;
+package adapter;
 
 import java.util.List;
 import java.util.Properties;
@@ -16,7 +16,7 @@ public interface AutoServer {
 	
 	public List<String> getAvailableModels();
 	
-	public String getSerializedAutomobile(String modelName);
+	public Automobile getAutomobile(String modelName);
 	
 	public void saveAutomobile(Automobile auto);
 }

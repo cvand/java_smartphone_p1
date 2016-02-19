@@ -6,11 +6,9 @@
 package adapter;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import exception.AutoException;
 import model.Automobile;
@@ -170,10 +168,10 @@ public abstract class ProxyAutomobile {
 		return models;
 	}
 
-	public String getSerializedAutomobile(String modelName) {
+	public Automobile getAutomobile(String modelName) {
 		Automobile auto = autos.get(modelName);
 		if (auto == null) return null;
-		return auto.toString();
+		return auto;
 	}
 
 }

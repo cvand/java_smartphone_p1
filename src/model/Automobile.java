@@ -318,6 +318,7 @@ public class Automobile implements Serializable {
 		sb.append(make);
 		sb.append(" ");
 		sb.append(model);
+		sb.append("\n");
 		for (OptionSet set : userChoice) {
 			sb.append(set.getName());
 			sb.append(": ");

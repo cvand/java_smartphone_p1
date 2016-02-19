@@ -27,8 +27,14 @@ public class CarModelOptionsIO {
 				// entered
 				String welcomeMessage = "Welcome to the Car Configuration System.";
 				System.out.println(welcomeMessage);
-				String firstOption = menu();
-				sendOutput(firstOption);
+				String option = null;
+				do {
+					option = menu();
+					if (option.equals("3")) {
+						System.out.println("No configuration found.");
+					}
+				} while (option.equals("3"));
+				sendOutput(option);
 
 				super.handleSession();
 			}
@@ -60,7 +66,13 @@ public class CarModelOptionsIO {
 						sendOutput(props);
 					} else if (strInput.contains("autoSaved")) {
 						System.out.println("Automobile saved!");
-						String option = menu();
+						String option = null;
+						do {
+							option = menu();
+							if (option.equals("3")) {
+								System.out.println("No configuration found.");
+							}
+						} while (option.equals("3"));
 						sendOutput(option);
 					}
 				}
@@ -76,14 +88,31 @@ public class CarModelOptionsIO {
 					sendOutput(m);
 				} else if (obj instanceof Automobile) {
 					Automobile a = (Automobile) obj;
+					System.out.println("Configuration started. (to finish editing, type done)");
+					SelectCarOption carOption = new SelectCarOption(a);
 					
-					setAutoOption(a, "Color", "Infra-Red Clearcoat");
-					setAutoOption(a, "Side Impact Air Bags", "Not present");
-					setAutoOption(a, "Power Moonroof", "Present");
-					setAutoOption(a, "Brakes/Traction Control", "ABS");
-					setAutoOption(a, "Transmission", "Standard");
+					String option = null;
+					do {
+						String setName = readInputFromUser("Enter the option name you want to add:");
+						if ("done".equals(setName)) break;
+						String choice = readInputFromUser("Enter you choice for this configuration:");
+						if ("done".equals(choice)) break;
+						carOption.setAutoOption(setName, choice);
+					} while (!"done".equals(option));
+//					carOption.setAutoOption("Color", "Infra-Red Clearcoat");
+//					carOption.setAutoOption("Side Impact Air Bags", "Not present");
+//					carOption.setAutoOption("Power Moonroof", "Present");
+//					carOption.setAutoOption("Brakes/Traction Control", "ABS");
+//					carOption.setAutoOption("Transmission", "Standard");
 					
-					String option = menu();
+					
+					option = null;
+					do {
+						option = menu();
+						if (option.equals("3")) {
+							carOption.printOptions();
+						}
+					} while (option.equals("3"));
 					sendOutput(option);
 				}
 			}
@@ -92,19 +121,13 @@ public class CarModelOptionsIO {
 		client.start();
 	}
 
-	private void setAutoOption(Automobile a, String optionSet, String optionChoice) {
-		a.setOptionChoice(optionSet, optionChoice);
-		System.out.println("Changed Option " + optionSet);
-		System.out.println(a.choicesToString());
-	}
-
 	private String menu() {
 		String option = null;
-		String menu = "Please select an option:\nUpload a properties file: press 1\nConfigure a car: press 2.";
+		String menu = "Please select an option:\nUpload a properties file: press 1\nConfigure a car: press 2\nView configured automobile: press 3";
 		boolean validInput = false;
 		do {
 			option = readInputFromUser(menu);
-			if ("1".equals(option) || "2".equals(option)) {
+			if ("1".equals(option) || "2".equals(option) || "3".equals(option)) {
 				validInput = true;
 			}
 

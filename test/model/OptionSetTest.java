@@ -26,7 +26,7 @@ public class OptionSetTest {
 	@Test
 	public void canAddOption() {
 		try {
-			set.addOption("Fort Knox Gold Clearcoat Metallic", 0);
+			set.addOption("Fort Knox Gold Clearcoat Metallic", (float) 0);
 			
 			Option o = set.getOptionByName("Fort Knox Gold Clearcoat Metallic");
 			assertNotEquals(null, o);
@@ -42,7 +42,7 @@ public class OptionSetTest {
 	@Test
 	public void canDeleteOption() {
 		try {
-			set.addOption("Fort Knox Gold Clearcoat Metallic", 0);
+			set.addOption("Fort Knox Gold Clearcoat Metallic", (float) 0);
 			set.removeOptionByName("Fort Knox Gold Clearcoat Metallic");
 			
 			assertEquals(null, set.getOptionByName("Fort Knox Gold Clearcoat Metallic"));
@@ -56,7 +56,7 @@ public class OptionSetTest {
 	@Test
 	public void canFindOptionByName() {
 		try {
-			set.addOption("Fort Knox Gold Clearcoat Metallic", 0);
+			set.addOption("Fort Knox Gold Clearcoat Metallic", (float) 0);
 			Option o = set.getOptionByName("Fort Knox Gold Clearcoat Metallic");
 			
 			assertNotEquals(null, o);

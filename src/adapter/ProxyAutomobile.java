@@ -5,7 +5,10 @@
 
 package adapter;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Properties;
 
 import exception.AutoException;
 import model.Automobile;
@@ -37,21 +40,10 @@ public abstract class ProxyAutomobile {
 		}
 	}
 
-	private Automobile findAutomobile(String modelName) {
+	public Automobile findAutomobile(String modelName) {
 		// fetch the automobile with key = modelName, if the map doesn't have
 		// one it'll return null
 		return autos.get(modelName);
-
-		// We can also iterate over the map of autos and see if there is an auto
-		// with name modelName
-		// Iterator<Automobile> it = autos.values().iterator();
-		// while (it.hasNext()) {
-		// Automobile currentAuto = it.next();
-		// if (currentAuto.getModel().equals(modelName)) {
-		// return currentAuto;
-		// }
-		// }
-		// return null;
 	}
 
 	public void updateOptionPrice(String modelName, String optionSetName, String option, Float newPrice) {
@@ -101,16 +93,16 @@ public abstract class ProxyAutomobile {
 		}
 	}
 
-	public void buildAuto(String filename) {
+	public synchronized void buildAuto(String filename, String fileType) {
 		FileIO fileIO = new FileIO();
 		boolean noError = false;
 		do {
 			try {
 
 				// Build Automobile Object from a file.
-				Automobile auto = fileIO.buildAutomobileObject(filename);
+				Automobile auto = fileIO.buildAutomobileObject(filename, fileType);
 				noError = true;
-				
+
 				// add the newly created model to the map
 				autos.put(auto.getModel(), auto);
 			} catch (AutoException e) {
@@ -127,6 +119,15 @@ public abstract class ProxyAutomobile {
 
 					e.fix(e.getType().getErrorNumber());
 					filename = (String) e.getFix("filename");
+
+				} else if (e.getType() == AutoException.ExceptionType.INVALID_FILETYPE) {
+					// if the exception is invalid filetype something is wrong
+					// with the type of file so handle it by asking the user for
+					// the filename and the filetype again
+
+					e.fix(e.getType().getErrorNumber());
+					filename = (String) e.getFix("filename");
+					fileType = (String) e.getFix("filetype");
 
 				}
 			}
@@ -147,6 +148,30 @@ public abstract class ProxyAutomobile {
 			return auto.toString();
 		}
 		return null;
+	}
+
+	public Automobile createAutomobileFromProperties(Properties properties) {
+		FileIO fileIO = new FileIO();
+		// Build Automobile Object from a properties object.
+		Automobile auto = fileIO.buildAutomobileObject(properties);
+		return auto;
+	}
+
+	public void saveAutomobile(Automobile auto) {
+		autos.put(auto.getModel(), auto);
+	}
+
+	public List<String> getAvailableModels() {
+		List<String> models = new ArrayList<String>();
+		models.addAll(autos.keySet());
+
+		return models;
+	}
+
+	public Automobile getAutomobile(String modelName) {
+		Automobile auto = autos.get(modelName);
+		if (auto == null) return null;
+		return auto;
 	}
 
 }

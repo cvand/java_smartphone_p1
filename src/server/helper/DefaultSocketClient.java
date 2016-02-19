@@ -64,7 +64,7 @@ public class DefaultSocketClient extends Thread implements SocketClientInterface
 			handleInput(obj);
 			
 			if ((obj instanceof String) && ((String) obj).equals("Bye")) {
-				break;
+				return;
 			}
 		}
 	}

@@ -96,14 +96,7 @@ public class CarModelOptionsIO {
 						if ("done".equals(choice)) break;
 						carOption.setAutoOption(setName, choice);
 					} while (!"done".equals(option));
-//					carOption.setAutoOption("Color", "Infra-Red Clearcoat");
-//					carOption.setAutoOption("Side Impact Air Bags", "Not present");
-//					carOption.setAutoOption("Power Moonroof", "Present");
-//					carOption.setAutoOption("Brakes/Traction Control", "ABS");
-//					carOption.setAutoOption("Transmission", "Standard");
 					
-					
-					option = null;
 					do {
 						option = menu();
 						if (option.equals("3")) {

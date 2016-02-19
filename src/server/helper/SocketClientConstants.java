@@ -3,7 +3,7 @@
  *
  */
 
-package server.client;
+package server.helper;
 
 public interface SocketClientConstants {
 	int iECHO_PORT = 7;

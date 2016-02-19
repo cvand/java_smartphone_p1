@@ -3,7 +3,7 @@
  *
  */
 
-package server.client;
+package server.helper;
 
 public interface SocketClientInterface {
 	boolean openConnection();

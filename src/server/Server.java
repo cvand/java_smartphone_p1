@@ -12,7 +12,7 @@ import java.util.Properties;
 
 import adapter.BuildAuto;
 import model.Automobile;
-import server.client.DefaultSocketClient;
+import server.helper.DefaultSocketClient;
 
 public class Server {
 
@@ -53,6 +53,7 @@ public class Server {
 					}
 
 					if (obj instanceof Properties) {
+						// the client sent a properties file
 						Properties props = (Properties) obj;
 						Automobile auto = buildCarModel.createAutomobileFromProperties(props);
 						buildCarModel.saveAutomobile(auto);

@@ -37,21 +37,10 @@ public abstract class ProxyAutomobile {
 		}
 	}
 
-	private Automobile findAutomobile(String modelName) {
+	public Automobile findAutomobile(String modelName) {
 		// fetch the automobile with key = modelName, if the map doesn't have
 		// one it'll return null
 		return autos.get(modelName);
-
-		// We can also iterate over the map of autos and see if there is an auto
-		// with name modelName
-		// Iterator<Automobile> it = autos.values().iterator();
-		// while (it.hasNext()) {
-		// Automobile currentAuto = it.next();
-		// if (currentAuto.getModel().equals(modelName)) {
-		// return currentAuto;
-		// }
-		// }
-		// return null;
 	}
 
 	public void updateOptionPrice(String modelName, String optionSetName, String option, Float newPrice) {
@@ -101,7 +90,7 @@ public abstract class ProxyAutomobile {
 		}
 	}
 
-	public void buildAuto(String filename) {
+	public synchronized void buildAuto(String filename) {
 		FileIO fileIO = new FileIO();
 		boolean noError = false;
 		do {

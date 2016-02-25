@@ -61,6 +61,10 @@ public class DefaultSocketClient extends Thread implements SocketClientInterface
 	public void handleSession() {
 		Object obj = null;
 		while ((obj = deserializeObject()) != null) {
+			if ((obj instanceof String) && ((String) obj).equals("Bye!")) {
+				break;
+			}
+			
 			handleInput(obj);
 		}
 	}

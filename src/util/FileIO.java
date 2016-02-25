@@ -32,8 +32,10 @@ public class FileIO {
 
 	private final String PROP_CAR_MAKE = "CarMake";
 	private final String PROP_CAR_MODEL = "CarModel";
+	private final String PROP_CAR_PRICE = "CarPrice";
 	private final String PROP_OPTION = "Option";
 	private final String PROP_OPTION_VALUE = "OptionValue";
+	private final String PROP_OPTION_VALUE_PRICE = "OptionValuePrice";
 
 	// builAutomobileObject method only forwards any exceptions caused because
 	// of problems with the configuration file. The remaining exceptions are
@@ -287,7 +289,6 @@ public class FileIO {
 		Enumeration<?> en = props.propertyNames();
 		// Every time we find an Option# key we save it and the following
 		// OptionValue# properties are going to be added to that optionSet
-		// String setName = null;
 
 		Map<String, String> optionSetMap = new HashMap<String, String>();
 
@@ -297,20 +298,63 @@ public class FileIO {
 			// check what the current property key is
 			if (PROP_CAR_MAKE.equals(key)) {
 				auto.setMake(props.getProperty(key));
-				continue;
 			} else if (PROP_CAR_MODEL.equals(key)) {
 				auto.setModel(props.getProperty(key));
-				continue;
+			} else if (PROP_CAR_PRICE.equals(key)) {
+				auto.setBasePrice(Float.parseFloat(props.getProperty(key)));
+			} else if (key.contains(PROP_OPTION_VALUE_PRICE)) {
+				// skip those properties for the next iteration
 			} else if (key.contains(PROP_OPTION_VALUE)) {
+				// skip those properties for the next iteration
+			}else if (key.contains(PROP_OPTION)) {
+				String setName = props.getProperty(key);
+				auto.addOptionSet(setName);
+
+				// remove from the key all non numeric characters and make that
+				// number the key for the optionSetMap
+				optionSetMap.put(key.replaceAll("[^\\d.]", ""), setName);
+			}
+		}
+
+		// reset the enumerator and add the option values now that the
+		// optionSetMap is filled with all the options
+		en = props.propertyNames();
+
+		// Every time we find an OptionValue# key we save it and the following
+		// OptionValuePrice# properties are going to be added to that option
+		Map<String, String> optionMap = new HashMap<String, String>();
+		while (en.hasMoreElements()) {
+			String key = (String) en.nextElement();
+			if (key.contains(PROP_OPTION_VALUE_PRICE)) {
+				// skip for the next iteration
+			} else if (key.contains(PROP_OPTION_VALUE)) {
+					// remove from the key the prefix "OptionValue" and add
+					// in the optionMap the value of the option with key the remainder of the key
+					String optKey = key.replaceAll(PROP_OPTION_VALUE, "");
+					optionMap.put(optKey, props.getProperty(key));
+			}
+		}
+		
+
+		// reset the enumerator and add the option value prices now that the
+		// optionSetMap and optionMap are filled with all the sets and options
+		en = props.propertyNames();
+
+		while (en.hasMoreElements()) {
+			String key = (String) en.nextElement();
+			if (key.contains(PROP_OPTION_VALUE_PRICE)) {
 				boolean noError = false;
 				do {
 					// remove from the key all non numeric characters and find
-					// the corrsponding optionSet name in the optionSetMap
+					// the corresponding optionSet name in the optionSetMap
 					String k = key.replaceAll("[^\\d.]", "");
+					String optKey = key.replaceAll(PROP_OPTION_VALUE_PRICE, "");
 					String setName = optionSetMap.get(k);
+					String optionName = optionMap.get(optKey);
 					try {
 
-						auto.addOptionInSet(setName, props.getProperty(key), null);
+//						optionMap.put(optKey, props.getProperty(key));
+						auto.addOptionInSet(setName, optionName, Float.parseFloat(props.getProperty(key)));
 						noError = true;
 					} catch (AutoException e) {
 						// if an exception is thrown it's gonna be from
@@ -327,16 +371,6 @@ public class FileIO {
 						}
 					}
 				} while (!noError);
-
-				continue;
-			} else if (key.contains(PROP_OPTION)) {
-				String setName = props.getProperty(key);
-				auto.addOptionSet(setName);
-
-				// remove from the key all non numeric characters and make that
-				// number the key for the optionSetMap
-				optionSetMap.put(key.replaceAll("[^\\d.]", ""), setName);
-				continue;
 			}
 		}
 	}

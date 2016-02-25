@@ -1,0 +1,8 @@
+wait for 1550.812620091737
+EO2 - Option before changing: Option :: {name: Automatic, price: 0.0}
+EO2 - Option AFTER changing: Option :: {name: Automatics2, price: 0.0}
+--------
+wait for 2892.8149807346854
+EO1 - Option before changing: null
+This option doesn't exist in this option set in this automobile configuration.
+Please enter the new option name or type exit to stop the program:

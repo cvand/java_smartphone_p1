@@ -189,11 +189,7 @@ public class Automobile implements Serializable {
 	public synchronized String getOptionChoice(String setName) {
 		for (OptionSet set : userChoice) {
 			if (set.getName().equals(setName)) {
-				Option opt = set.getOptionChoice();
-				if (opt == null) {
-					return "";
-				}
-				return opt.getName();
+				return set.getOptionChoice().getName();
 			}
 		}
 		return null;
@@ -318,7 +314,6 @@ public class Automobile implements Serializable {
 		sb.append(make);
 		sb.append(" ");
 		sb.append(model);
-		sb.append("\n");
 		for (OptionSet set : userChoice) {
 			sb.append(set.getName());
 			sb.append(": ");

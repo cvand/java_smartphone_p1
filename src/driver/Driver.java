@@ -8,10 +8,10 @@ package driver;
 import java.io.IOException;
 
 import adapter.BuildAuto;
-import client.CarModelOptionsIO;
 import exception.AutoException;
 import model.Automobile;
 import scale.EditOptions;
+import server.Server;
 import util.FileIO;
 
 public class Driver {
@@ -20,13 +20,14 @@ public class Driver {
 
 	public static void main(String[] args) {
 
-		testClientSocket();
+		testServerSocket();
 //		testSerialEditOptions();
 //		testFileIOAndSerialization();
 	}
 	
-	public static void testClientSocket() {
-		new CarModelOptionsIO();
+	public static void testServerSocket() {
+		
+		new Server();
 	}
 	
 	public static void testSerialEditOptions() {
